@@ -15,18 +15,18 @@ retval=$?
 if [ $retval -eq 127 ]
     then 
         #~ Flatpak is not installed
-        echo "\"Flatpak installed\":false,"
-        echo "\"Flathub enabled\":false,"
+        echo '"Flatpak installed":false,'
+        echo '"Flathub enabled":false,'
     else
         #~ Flatpak is installed
-        echo "\"Flatpak installed\":true,"
+        echo '"Flatpak installed":true,'
         
         #~ Check if flathub is enabled
         if flatpak remotes --columns url | grep 'https://dl.flathub.org/repo/' >/dev/null
             then
-                echo "\"Flathub enabled\":true,"
+                echo '"Flathub enabled":true,'
             else
-                echo "\"Flathub enabled\":false,"
+                echo '"Flathub enabled":false,'
         fi
 fi
 
@@ -70,7 +70,7 @@ num_users=$(awk -F':' -v "min=${uid_min##UID_MIN}" -v "max=${uid_max##UID_MAX}" 
 echo "\"Number of users\":$num_users,"
 
 #~ Get default browser
-echo "\"Default browser\": $(xdg-mime query default x-scheme-handler/http),"
+echo "\"Default browser\":\"$(xdg-mime query default x-scheme-handler/http)\","
 
 #~ Get list of enabled GNOME extensions
 extensions=$(gnome-extensions list --enabled | sed -e 's/^/"/g' -e 's/$/",/g')
