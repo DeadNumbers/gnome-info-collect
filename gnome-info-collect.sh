@@ -69,6 +69,9 @@ uid_min=$(grep "^UID_MIN" /etc/login.defs); uid_max=$(grep "^UID_MAX" /etc/login
 num_users=$(awk -F':' -v "min=${uid_min##UID_MIN}" -v "max=${uid_max##UID_MAX}" '{ if ( $3 >= min && $3 <= max ) print $0}' /etc/passwd | wc -l)
 echo "\"Number of users\":$num_users,"
 
+#~ Get default browser
+echo "\"Default browser\": $(xdg-mime query default x-scheme-handler/http),"
+
 #~ Get list of enabled GNOME extensions
 extensions=$(gnome-extensions list --enabled | sed -e 's/^/"/g' -e 's/$/",/g')
 echo "\"Enabled extensions\":[$extensions]" | sed 's/,]/]/' # Don't forget to add a comma after the array if more commands follow after this one!
