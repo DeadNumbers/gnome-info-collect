@@ -62,6 +62,13 @@ echo "\"Workspaces only on primary\":$workspaces_primary,"
 workspaces_dynamic=$(gsettings get org.gnome.shell.overrides dynamic-workspaces || echo '"Error",')
 echo "\"Workspaces dynamic\":$workspaces_dynamic,"
 
+#~ Get number of user accounts
+# Get min and max uid of a user account to filter out non-user accounts
+uid_min=$(grep "^UID_MIN" /etc/login.defs); uid_max=$(grep "^UID_MAX" /etc/login.defs)
+# Get user accounts from /etc/passwd and count them
+num_users=$(awk -F':' -v "min=${uid_min##UID_MIN}" -v "max=${uid_max##UID_MAX}" '{ if ( $3 >= min && $3 <= max ) print $0}' /etc/passwd | wc -l)
+echo "\"Number of users\":$num_users,"
+
 #~ Get list of enabled GNOME extensions
 extensions=$(gnome-extensions list --enabled | sed -e 's/^/"/g' -e 's/$/",/g')
 echo "\"Enabled extensions\":[$extensions]" | sed 's/,]/]/' # Don't forget to add a comma after the array if more commands follow after this one!
