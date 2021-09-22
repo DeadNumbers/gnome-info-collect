@@ -70,7 +70,7 @@ num_users=$(awk -F':' -v "min=${uid_min##UID_MIN}" -v "max=${uid_max##UID_MAX}" 
 echo "\"Number of users\":$num_users,"
 
 #~ Get default browser
-echo "\"Default browser\":\"$(xdg-mime query default x-scheme-handler/http)\","
+echo "\"Default browser\":\"$(xdg-mime query default x-scheme-handler/http)\"," | sed 's/.desktop//'
 
 #~ Get list of enabled GNOME extensions
 extensions=$(gnome-extensions list --enabled | sed -e 's/^/"/g' -e 's/$/",/g')
