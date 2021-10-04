@@ -4,6 +4,9 @@
 
 #~ Start JSON object
 echo "{"
+
+#~ TODO: Sharing settings and online accounts, potentially GPU and graphic drivers
+#~ ###############################################################################
     
 #~ Get computer manufacturer, model and running operating system 
 #~ including its version
