@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-from http.server import ThreadingHTTPServer, BaseHTTPRequestHandler
+from http.server import HTTPServer, BaseHTTPRequestHandler
 
 class RequestHandler(BaseHTTPRequestHandler):
     def _set_response(self):
@@ -24,7 +24,7 @@ class RequestHandler(BaseHTTPRequestHandler):
 
 def main():
     PORT = 12345
-    server = ThreadingHTTPServer(('', PORT), RequestHandler)
+    server = HTTPServer(('', PORT), RequestHandler)
     print(f"Server running on port {PORT}")
     server.serve_forever()
 
