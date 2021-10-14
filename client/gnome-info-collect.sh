@@ -83,4 +83,4 @@ echo "\"Enabled extensions\":[$extensions]" | sed 's/,]/]/' # Don't forget to ad
 echo "}"
 
 #~ Dump info into a file
-} > info-dump.json # 2>/dev/null
+} # > info-dump.json # 2>/dev/null
