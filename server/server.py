@@ -23,8 +23,8 @@ class RequestHandler(BaseHTTPRequestHandler):
         self.wfile.write("Request recieved\n".encode())
 
 def main():
-    PORT = 12345
-    server = HTTPServer(('', PORT), RequestHandler)
+    PORT = 8080
+    server = HTTPServer(('0.0.0.0', PORT), RequestHandler)
     print(f"Server running on port {PORT}")
     server.serve_forever()
 
