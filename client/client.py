@@ -2,13 +2,14 @@
 
 import subprocess
 import requests
+import os
 from sys import stderr
 
 # ~ Adress of a server to send the data to
 ADDRESS="http://gnome-info-collect-gnome-info-collect.openshift.gnome.org"
 
 # ~ Run the script and get the info
-json_output = subprocess.run("./gnome-info-collect.sh", capture_output=True).stdout.decode()
+json_output = subprocess.run(os.path.dirname(__file__) + "/gnome-info-collect.sh", capture_output=True).stdout.decode()
 
 # ~ Debug 
 # stderr.write(f"Output:\n{json_output}\n")
