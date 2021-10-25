@@ -7,26 +7,36 @@
 #  Copyright 2021 vstanek <vstanek@redhat.com>
 
 from http.server import HTTPServer, BaseHTTPRequestHandler
+from pathlib import Path
+from time import time
 
 class RequestHandler(BaseHTTPRequestHandler):
     def _set_response(self):
         self.send_response(200)
         self.send_header('content-type', 'text/html')
         self.end_headers()
-    
+        
+    def _process_post_data(self):
+        length = int(self.headers['Content-Length']) # Gets the size of data
+        data = self.rfile.read(length).decode() # Gets the data
+        
+        # ~ Debug
+        # ~ print(f"Recieved data:\n{data}")
+        
+        # ~ Get to parent directory and create a timestamped file in the folder 'data'
+        f = open(str(Path(__file__).parent.parent.absolute()) + "/data/" + f"data_{time()}.json", "w")
+        f.write(data)
+        f.close()
+        
     def do_GET(self):
         self._set_response()
         self.wfile.write("Gnome-info-collect server v1\nStatus: Running\n".encode())
 
     def do_POST(self):
-        length = int(self.headers['Content-Length']) # Gets the size of data
-        data = self.rfile.read(length) # Gets the data
-        
-        # ~ Change to save the data into a file
-        print(f"Recieved data: {data.decode()}")
+        self._process_post_data()
         
         self._set_response()
-        self.wfile.write("Request recieved\n".encode())
+        self.wfile.write("Data recieved successfully\n".encode())
 
 def main():
     PORT = 8080
