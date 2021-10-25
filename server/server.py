@@ -16,7 +16,7 @@ class RequestHandler(BaseHTTPRequestHandler):
     
     def do_GET(self):
         self._set_response()
-        self.wfile.write("Hello world!".encode())
+        self.wfile.write("Gnome-info-collect server v1\nStatus: Running\n".encode())
 
     def do_POST(self):
         length = int(self.headers['Content-Length']) # Gets the size of data
