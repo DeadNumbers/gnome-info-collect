@@ -1,5 +1,11 @@
 #!/usr/bin/env python
 
+#  PROJECT: gnome-info-collect
+#  FILE:    server/server.py
+#  LICENCE: GPLv3+
+#  
+#  Copyright 2021 vstanek <vstanek@redhat.com>
+
 from http.server import HTTPServer, BaseHTTPRequestHandler
 
 class RequestHandler(BaseHTTPRequestHandler):

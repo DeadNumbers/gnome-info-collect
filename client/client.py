@@ -1,5 +1,11 @@
 #!/usr/bin/env python
 
+#  PROJECT: gnome-info-collect
+#  FILE:    client/client.py
+#  LICENCE: GPLv3+
+#  
+#  Copyright 2021 vstanek <vstanek@redhat.com>
+
 import subprocess
 import requests
 import os

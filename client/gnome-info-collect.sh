@@ -1,5 +1,11 @@
 #!/bin/sh
 
+#  PROJECT: gnome-info-collect
+#  FILE:    client/gnome-info-collect.sh
+#  LICENCE: GPLv3+
+#  
+#  Copyright 2021 vstanek <vstanek@redhat.com>
+
 {
 
 #~ Start JSON object
