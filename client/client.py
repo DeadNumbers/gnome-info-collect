@@ -11,8 +11,8 @@ import requests
 import os
 from sys import stderr
 
-# ~ Adress of a server to send the data to
-ADDRESS="http://gnome-info-collect-gnome-info-collect.openshift.gnome.org"
+# ~ Address of a server to send the data to
+ADDRESS="https://gnome-info-collect-gnome-info-collect.openshift.gnome.org"
 
 # ~ Run the script and get the info
 json_output = subprocess.run(os.path.dirname(__file__) + "/gnome-info-collect.sh", capture_output=True).stdout.decode()
@@ -23,9 +23,20 @@ json_output = subprocess.run(os.path.dirname(__file__) + "/gnome-info-collect.sh
 try:
     # ~ Send the data
     r = requests.post(ADDRESS, data=json_output)
-    # ~ Print server output
-    print(f"{r.status_code}: {r.text}")
     
-    if(r.status_code != 200): raise(Exception)
+    # ~ Raise HTTPError if request returned an unsuccessful status code
+    r.raise_for_status()
+    
+except requests.HTTPError:
+    print(f"Status {r.status_code}: An HTTP error occured\n")
+except requests.ConnectionError:
+    print("Connection Error: please check your internet connection and try again\n")
+except requests.Timeout:
+    print("Timeout error: request timed out\nPlease check your internet connection and try again\n")
 except:
-    print("Sending data unsuccessful, please, try again.\n")
+    print("Unknown error: sending data unsuccessful, please, try again.\n")
+
+else:
+    # ~ No errors, print server output
+    print(f"Status {r.status_code}: {r.text}")
+    
