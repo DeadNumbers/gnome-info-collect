@@ -13,8 +13,9 @@ import os
 # ~ Address of a server to send the data to
 ADDRESS="https://gnome-info-collect-gnome-info-collect.openshift.gnome.org"
 
+# add check for permissions with PermissionError
 # ~ Run the script and get the info
-json_output = subprocess.run(os.path.dirname(__file__) + "/gnome-info-collect.sh", capture_output=True).stdout.decode()
+json_output = subprocess.run(os.path.dirname(__file__) + "/gnome-info-collect.sh", capture_output=True).stdout
 
 # ~ Debug 
 # print(f"Output:\n{json_output}\n")
@@ -27,7 +28,7 @@ try:
     r.raise_for_status()
     
 except requests.HTTPError:
-    print(f"Status {r.status_code}: An HTTP error occured\n")
+    print(f"Status {r.status_code}: An HTTP error occured\nServer message: {r.text}\n")
 except requests.ConnectionError:
     print("Connection Error: please check your internet connection and try again\n")
 except requests.Timeout:
