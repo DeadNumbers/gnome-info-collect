@@ -21,8 +21,6 @@ class RequestHandler(BaseHTTPRequestHandler):
         self.send_response(400)
         self.send_header('content-type', 'text/html')
         self.end_headers()
-
-        self.wfile.write("Error: Invalid data recieved\n".encode())
         
     def _process_post_data(self):
         length = int(self.headers['Content-Length']) # Gets the size of data
@@ -55,9 +53,8 @@ class RequestHandler(BaseHTTPRequestHandler):
             self._process_post_data()
         except ValueError:
             self._set_invalid_data_response()
-
-        self.send_header('content-type', 'text/html')
-        self.end_headers()
+            self.wfile.write("Error: Invalid data recieved\n".encode())
+            return
         
         self._set_OK_response()
         self.wfile.write("Data recieved successfully\n".encode())
