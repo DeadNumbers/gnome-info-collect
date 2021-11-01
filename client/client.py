@@ -15,7 +15,11 @@ ADDRESS="https://gnome-info-collect-gnome-info-collect.openshift.gnome.org"
 
 # add check for permissions with PermissionError
 # ~ Run the script and get the info
-json_output = subprocess.run(os.path.dirname(__file__) + "/gnome-info-collect.sh", capture_output=True).stdout
+try:
+    json_output = subprocess.run(os.path.dirname(__file__) + "/gnome-info-collect.sh", shell=False, capture_output=True, check=True).stdout
+except subprocess.CalledProcessError as e:
+    print(f"Error collecting the data!\nExit code: {e.returncode}\nOuptut: {e.output}")
+    exit(1)
 
 # ~ Debug 
 # print(f"Output:\n{json_output}\n")
