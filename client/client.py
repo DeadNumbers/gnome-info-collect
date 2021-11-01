@@ -16,13 +16,13 @@ ADDRESS="https://gnome-info-collect-gnome-info-collect.openshift.gnome.org"
 # add check for permissions with PermissionError
 # ~ Run the script and get the info
 try:
-    json_output = subprocess.run(os.path.dirname(__file__) + "/gnome-info-collect.sh", shell=False, capture_output=True, check=True).stdout
+    json_output = subprocess.run(os.path.dirname(os.path.abspath(__file__)) + "/gnome-info-collect.sh", shell=False, capture_output=True, check=True).stdout
 except subprocess.CalledProcessError as e:
     print(f"Error collecting the data!\nExit code: {e.returncode}\nOuptut: {e.output}")
-    exit(1)
+    exit(e.returncode)
 
 # ~ Debug 
-# print(f"Output:\n{json_output}\n")
+# ~ print(f"Output:\n{json_output}\n")
 
 try:
     # ~ Send the data
@@ -34,13 +34,12 @@ try:
 except requests.HTTPError:
     print(f"Status {r.status_code}: An HTTP error occured\nServer message: {r.text}\n")
 except requests.ConnectionError:
-    print("Connection Error: please check your internet connection and try again\n")
+    print("Connection Error: Please check your internet connection and try again\n")
 except requests.Timeout:
-    print("Timeout error: request timed out\nPlease check your internet connection and try again\n")
+    print("Timeout error: Request timed out\nPlease check your internet connection and try again\n")
 except:
-    print("Unknown error: sending data unsuccessful, please, try again.\n")
+    print("Unknown error: Sending data unsuccessful, please, try again.\n")
 
 else:
     # ~ No errors, print server output
     print(f"Status {r.status_code}: {r.text}")
-    
