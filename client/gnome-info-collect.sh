@@ -6,6 +6,7 @@
 #  
 #  Copyright 2021 vstanek <vstanek@redhat.com>
 
+
 {
 
 #~ Start JSON object
@@ -13,7 +14,10 @@ echo "{"
 
 #~ TODO: Sharing settings and online accounts, potentially GPU and graphic drivers
 #~ ###############################################################################
-    
+
+#~ Enter client folder if not already there
+cd $(dirname $(realpath $0))
+
 #~ Get computer manufacturer, model and running operating system including its version
 hostnamectl | grep -e 'Hardware' -e 'Operating System' | sed -e 's/^[ \t]*/"/g' -e 's/:[ \t]*/":"/g' -e 's/$/",/g' # Convert to JSON format using sed
 
