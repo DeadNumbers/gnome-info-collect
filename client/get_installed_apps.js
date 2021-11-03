@@ -1,3 +1,12 @@
+//  PROJECT: gnome-info-collect
+//  FILE:    client/get_installed_apps.js
+//  LICENCE: GPLv3+
+//
+//  Copyright 2021 vstanek <vstanek@redhat.com>
+//
+//  Code in this file gracefully provided by the awesome fmuellner <fmuellner@redhat.com>
+
+
 const { Gio, GLib } = imports.gi;
 
 const HAVE_MALCONTENT = imports.package.checkSymbol(

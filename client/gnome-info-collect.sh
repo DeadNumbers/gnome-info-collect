@@ -14,8 +14,7 @@ echo "{"
 #~ TODO: Sharing settings and online accounts, potentially GPU and graphic drivers
 #~ ###############################################################################
     
-#~ Get computer manufacturer, model and running operating system 
-#~ including its version
+#~ Get computer manufacturer, model and running operating system including its version
 hostnamectl | grep -e 'Hardware' -e 'Operating System' | sed -e 's/^[ \t]*/"/g' -e 's/:[ \t]*/":"/g' -e 's/$/",/g' # Convert to JSON format using sed
 
 #~ Check if flatpak is installed
