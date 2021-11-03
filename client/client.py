@@ -9,6 +9,7 @@
 import subprocess
 import requests
 import os
+import js2py
 
 # ~ Address of a server to send the data to
 ADDRESS="https://gnome-info-collect-gnome-info-collect.openshift.gnome.org"

@@ -40,12 +40,12 @@ if [ $retval -eq 127 ]
 fi
 
 #~ Get list of all installed apps
-installed_apps=$(gdbus call --session --dest org.gnome.Shell --object-path /org/gnome/Shell --method org.gnome.Shell.Eval 'imports.gi.Shell.AppSystem.get_default().get_installed().filter(app => imports.misc.parentalControlsManager.getDefault().shouldShowApp(app)).map(app => app.get_id())' 2>/dev/null || echo '"Error",')
+installed_apps=$(gjs get_installed_apps.js || echo '"Error",')
 
 echo -n '"Installed apps":'
 if [ "$installed_apps" != '"Error",' ]
     then
-        echo $installed_apps | grep -o '\[.*]' | sed -e 's/.desktop//g' -e 's/]/],/'
+        echo $installed_apps | sed -e 's/.desktop//g' -e 's/,/", "/g' -e 's/^/["/' -e 's/$/"],/'
     else
         echo $installed_apps
 fi
