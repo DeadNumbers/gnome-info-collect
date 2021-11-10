@@ -43,7 +43,7 @@ if [ $retval -eq 127 ]
 fi
 
 #~ Get list of all installed apps
-installed_apps=$(gjs get_installed_apps.js || echo '"Error",')
+installed_apps=$(gjs get_installed_apps.js 2>/dev/null || echo '"Error",')
 
 echo -n '"Installed apps":'
 if [ "$installed_apps" != '"Error",' ]
@@ -65,6 +65,9 @@ if grep -q "@as \[\]"
         echo "$favs," | sed -e "s/'/\"/g" -e "s/.desktop//g" # Substitute " for ' and remove .desktop
 fi
 
+#~ Get list of setup online accounts
+accounts=$(gjs get_online_accounts.js 2>/dev/null || echo '"Error",')
+echo "\"Online accounts\":$accounts,"
 
 #~ Get worspaces only on primary display
 workspaces_primary=$(gsettings get org.gnome.mutter workspaces-only-on-primary || echo '"Error",')
