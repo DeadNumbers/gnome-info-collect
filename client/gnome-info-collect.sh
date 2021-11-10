@@ -43,38 +43,31 @@ if [ $retval -eq 127 ]
 fi
 
 #~ Get list of all installed apps
-installed_apps=$(gjs get_installed_apps.js 2>/dev/null || echo '"Error",')
-
-echo -n '"Installed apps":'
-if [ "$installed_apps" != '"Error",' ]
-    then
-        echo $installed_apps | sed -e 's/.desktop//g' -e 's/,/", "/g' -e 's/^/["/' -e 's/$/"],/'
-    else
-        echo $installed_apps
-fi
+installed_apps=$(gjs get_installed_apps.js 2>/dev/null || echo '"Error"')
+echo "\"Installed apps\":$installed_apps,"
 
 #~ Get list of favorited apps (in GNOME Dash)
-favs=$(gsettings get org.gnome.shell favorite-apps || echo '"Error",')
+favs=$(gsettings get org.gnome.shell favorite-apps || echo '"Error"')
 
 echo -n '"Favourited apps":'
 echo $favs | \
 if grep -q "@as \[\]"
     then 
-        echo '"None"' 
+        echo '"None",' 
     else 
         echo "$favs," | sed -e "s/'/\"/g" -e "s/.desktop//g" # Substitute " for ' and remove .desktop
 fi
 
 #~ Get list of setup online accounts
-accounts=$(gjs get_online_accounts.js 2>/dev/null || echo '"Error",')
+accounts=$(gjs get_online_accounts.js 2>/dev/null || echo '"Error"')
 echo "\"Online accounts\":$accounts,"
 
 #~ Get worspaces only on primary display
-workspaces_primary=$(gsettings get org.gnome.mutter workspaces-only-on-primary || echo '"Error",')
+workspaces_primary=$(gsettings get org.gnome.mutter workspaces-only-on-primary || echo '"Error"')
 echo "\"Workspaces only on primary\":$workspaces_primary,"
 
 #~ Get wheter workspaces are dynamic
-workspaces_dynamic=$(gsettings get org.gnome.shell.overrides dynamic-workspaces || echo '"Error",')
+workspaces_dynamic=$(gsettings get org.gnome.shell.overrides dynamic-workspaces || echo '"Error"')
 echo "\"Workspaces dynamic\":$workspaces_dynamic,"
 
 #~ Get number of user accounts

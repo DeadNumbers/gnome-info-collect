@@ -35,4 +35,4 @@ const apps = Gio.AppInfo.get_all().filter(app => {
     return app.should_show() &&
         (!appFilter || appFilter.is_appinfo_allowed(app));
 });
-print(apps.map(app => app.get_id()));
+print('["' + apps.map(app => app.get_id()).join('", "') + '"]'); //print as JSON array
