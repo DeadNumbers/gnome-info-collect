@@ -62,6 +62,50 @@ fi
 accounts=$(gjs get_online_accounts.js 2>/dev/null || echo '"Error"')
 echo "\"Online accounts\":$accounts,"
 
+#~ Get sharing settings:
+# File sharing (DAV)
+echo -n "\"File sharing\":"
+file_sharing=$(gsettings get org.gnome.settings-daemon.plugins.sharing.service:/org/gnome/settings-daemon/plugins/sharing/gnome-user-share-webdav/ enabled-connections || echo '"Error"')
+echo $file_sharing | \
+if grep -q "@as \[\]"
+    then
+        echo '"inactive",'
+elif [ "$file_sharing" == '"Error"' ]
+    then
+        echo '"Error",'
+    else
+        echo '"active",'
+fi
+# Remote desktop (VNC)
+echo -n "\"Remote desktop\":"
+remote_desktop=$(gsettings get org.gnome.settings-daemon.plugins.sharing.service:/org/gnome/settings-daemon/plugins/sharing/gnome-remote-desktop/ enabled-connections || echo '"Error"')
+echo $remote_desktop | \
+if grep -q "@as \[\]"
+    then
+        echo '"inactive",'
+elif [ "$remote_desktop" == '"Error"' ]
+    then
+        echo '"Error",'
+    else
+        echo '"active",'
+fi
+# Multimedia sharing
+echo -n "\"Multimedia sharing\":"
+multimedia_sharing=$(gsettings get org.gnome.settings-daemon.plugins.sharing.service:/org/gnome/settings-daemon/plugins/sharing/rygel/ enabled-connections || echo '"Error"')
+echo $multimedia_sharing | \
+if grep -q "@as \[\]"
+    then
+        echo '"inactive",'
+elif [ "$remote_desktop" == '"Error"' ]
+    then
+        echo '"Error",'
+    else
+        echo '"active",'
+fi
+#~ Remote login (over SSH)
+remote_login=$(systemctl is-active sshd)
+echo "\"Remote login\":\"$remote_login\","
+
 #~ Get worspaces only on primary display
 workspaces_primary=$(gsettings get org.gnome.mutter workspaces-only-on-primary || echo '"Error"')
 echo "\"Workspaces only on primary\":$workspaces_primary,"
