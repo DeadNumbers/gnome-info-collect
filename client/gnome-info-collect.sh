@@ -44,7 +44,7 @@ fi
 
 #~ Get list of all installed apps
 installed_apps=$(gjs get_installed_apps.js 2>/dev/null || echo '"Error"')
-echo "\"Installed apps\":$installed_apps,"
+echo "\"Installed apps\":$installed_apps," | sed -e 's/.desktop//g'
 
 #~ Get list of favorited apps (in GNOME Dash)
 favs=$(gsettings get org.gnome.shell favorite-apps || echo '"Error"')
@@ -55,7 +55,7 @@ if grep -q "@as \[\]"
     then 
         echo '"None",' 
     else 
-        echo "$favs," | sed -e "s/'/\"/g" -e "s/.desktop//g" # Substitute " for ' and remove .desktop
+        echo "$favs," | sed -e "s/'/\"/g" -e "s/.desktop//g"
 fi
 
 #~ Get list of setup online accounts
