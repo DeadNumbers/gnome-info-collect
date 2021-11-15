@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 #  PROJECT: gnome-info-collect
 #  FILE:    client/gnome-info-collect.sh
@@ -77,17 +77,36 @@ elif [ "$file_sharing" == '"Error"' ]
         echo '"active",'
 fi
 # Remote desktop (VNC)
+# Uses either gnome-remote-desktop or vino-server, need to check for both
 echo -n "\"Remote desktop\":"
-remote_desktop=$(gsettings get org.gnome.settings-daemon.plugins.sharing.service:/org/gnome/settings-daemon/plugins/sharing/gnome-remote-desktop/ enabled-connections || echo '"Error"')
-echo $remote_desktop | \
-if grep -q "@as \[\]"
+remote_desktop_gnome=$(gsettings get org.gnome.settings-daemon.plugins.sharing.service:/org/gnome/settings-daemon/plugins/sharing/gnome-remote-desktop/ enabled-connections || echo '"Error"')
+if echo $remote_desktop_gnome |  grep -q "@as \[\]"
+    then
+        gnome_rd='"inactive"'
+elif [ "$remote_desktop_gnome" == '"Error"' ]
+    then
+        gnome_rd='"Error"'
+    else
+        gnome_rd='"active"'
+fi
+remote_desktop_vino=$(gsettings get org.gnome.settings-daemon.plugins.sharing.service:/org/gnome/settings-daemon/plugins/sharing/vino-server/ enabled-connections || echo '"Error"')
+if echo $remote_desktop_vino | grep -q "@as \[\]"
+    then
+        vino='"inactive"'
+elif [ "$remote_desktop_vino" == '"Error"' ]
+    then
+        vino='"Error"'
+    else
+        vino='"active"'
+fi
+if [ "$gnome_rd" == '"inactive"' ] && [ "$vino" == '"inactive"' ] #Both inactive
     then
         echo '"inactive",'
-elif [ "$remote_desktop" == '"Error"' ]
+elif [ "$gnome_rd" == '"active"' ] || [ "$vino" == '"active"' ] #At least one active
     then
-        echo '"Error",'
-    else
         echo '"active",'
+else
+    echo '"Error",'
 fi
 # Multimedia sharing
 echo -n "\"Multimedia sharing\":"
