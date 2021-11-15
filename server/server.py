@@ -34,9 +34,8 @@ class RequestHandler(BaseHTTPRequestHandler):
             raise
         
         # ~ Get to parent directory and create a timestamped file in the folder 'data'
-        f = open(str(Path(__file__).parent.parent.absolute()) + "/data/" + f"data_{time()}.json", "w")
-        f.write(data)
-        f.close()
+        with open(str(Path(__file__).parent.parent.absolute()) + "/data/" + f"data_{time()}.json", "w") as f:
+            f.write(data)
 
     def _validate_post_data(self, data):
         try:
