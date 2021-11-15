@@ -20,4 +20,5 @@ try {
 
 const accounts = accountObjects.map(acc => acc.get_account().providerName); //providerType also available
 
-print('["' + accounts.join('", "') + '"]'); //print as a JSON array
+if(accounts.length === 0) { print ('[]')}
+else { print('["' + accounts.join('", "') + '"]')} //print as a JSON array
