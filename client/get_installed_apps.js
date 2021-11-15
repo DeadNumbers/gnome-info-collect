@@ -19,8 +19,10 @@ let appFilter;
 if (HAVE_MALCONTENT) {
     const [, stdout] = GLib.spawn_command_line_sync('id -u');
     const uid = imports.byteArray.toString(stdout).trim();
-    const manager = new Malcontent.Manager({ connection:
-Gio.DBus.system });
+    const manager = new Malcontent.Manager({
+        connection:
+            Gio.DBus.system
+    });
     try {
         appFilter = manager.get_app_filter(
             uid,
@@ -36,5 +38,5 @@ const apps = Gio.AppInfo.get_all().filter(app => {
         (!appFilter || appFilter.is_appinfo_allowed(app));
 });
 
-if(apps.length === 0) { print('[]')}
-else { print('["' + apps.map(app => app.get_id()).join('", "') + '"]')} //print as JSON array
+if (apps.length === 0) { print('[]') }
+else { print('["' + apps.map(app => app.get_id()).join('", "') + '"]') } //print as JSON array

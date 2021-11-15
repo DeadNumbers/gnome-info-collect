@@ -13,12 +13,12 @@ const goaClient = Goa.Client.new_sync(null);
 let accountObjects;
 try {
     accountObjects = goaClient.get_accounts();
-} catch(e) {
+} catch (e) {
     logError(e);
 }
 
 
 const accounts = accountObjects.map(acc => acc.get_account().providerName); //providerType also available
 
-if(accounts.length === 0) { print ('[]')}
-else { print('["' + accounts.join('", "') + '"]')} //print as a JSON array
+if (accounts.length === 0) { print('[]') }
+else { print('["' + accounts.join('", "') + '"]') } //print as a JSON array
