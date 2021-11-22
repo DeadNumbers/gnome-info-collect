@@ -39,7 +39,14 @@ class RequestHandler(BaseHTTPRequestHandler):
 
     def _validate_post_data(self, data):
         try:
-            json.loads(data)
+            json_data = json.loads(data)
+
+            # Test whether correct data is present
+            KEYS = ("Operating System", "Flatpak installed", "Flathub enabled", "Installed apps", "Favourited apps",
+                    "Online accounts", "File sharing", "Remote desktop", "Multimedia sharing", "Remote login",
+                    "Workspaces only on primary", "Workspaces dynamic", "Number of users", "Default browser", "Enabled extensions")
+            if not all(key in json_data for key in KEYS): # if any of the keys is missing in the recieved data
+                raise ValueError
         except ValueError: # Invalid json
             raise
         
