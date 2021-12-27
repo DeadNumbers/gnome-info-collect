@@ -6,7 +6,7 @@
 #  
 #  Copyright 2021 vstanek <vstanek@redhat.com>
 
-from http.server import HTTPServer, BaseHTTPRequestHandler
+from http.server import ThreadingHTTPServer, BaseHTTPRequestHandler
 from pathlib import Path
 from time import time
 import json
@@ -67,7 +67,7 @@ class RequestHandler(BaseHTTPRequestHandler):
 
 def main():
     PORT = 8080
-    server = HTTPServer(('0.0.0.0', PORT), RequestHandler)
+    server = ThreadingHTTPServer(('0.0.0.0', PORT), RequestHandler)
     print(f"Server running on port {PORT}")
     server.serve_forever()
 
