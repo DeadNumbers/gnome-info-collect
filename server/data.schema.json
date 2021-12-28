@@ -89,5 +89,7 @@
             },
             "uniqueItems": true
         }
-    }
+    },
+    "additionalProperties": false,
+    "minProperties": 17
 }
