@@ -48,6 +48,7 @@ class GCollector():
         self._get_favourited_apps()
         self._get_online_accounts()
         self._get_sharing_settings()
+        self._get_workspaces_status()
 
         return self.data
 
@@ -177,8 +178,21 @@ class GCollector():
         except subprocess.CalledProcessError:
             raise
 
-    # TODO: Workspaces only on primary
-    # TODO: Workspaces dynamic
+    def _get_workspaces_status(self):
+        mutter_settings = Gio.Settings(schema_id="org.gnome.mutter")
+
+        # Workspaces only on primary display
+        workspaces_primary = mutter_settings.get_value(
+            "workspaces-only-on-primary"
+        )
+        self.data["Workspaces only on primary"] = bool(workspaces_primary)
+
+        # Dynamic workspaces
+        workspaces_dynamic = mutter_settings.get_value(
+            "dynamic-workspaces"
+        )
+        self.data["Workspaces dynamic"] = bool(workspaces_dynamic)
+
     # TODO: Number of user accounts
     # TODO: Default browser
     # TODO: List of enabled GNOME extensions
