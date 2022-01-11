@@ -12,7 +12,16 @@ import subprocess
 import re
 import json
 
-from gi.repository import GLib
+import gi
+from gi.repository import GLib, Gio
+
+# Older GNOME (<41) compatibility
+try:
+    gi.require_version('Malcontent', '0')
+    from gi.repository import Malcontent
+    HAVE_MALCONTENT = True
+except (ValueError, ImportError):
+    HAVE_MALCONTENT = False
 
 # ~ User application data directory and status file
 USER_DIR = GLib.get_user_data_dir()
@@ -33,6 +42,7 @@ class GCollector():
 
         self._get_hw_os_info()
         self._get_flatpak_info()
+        self._get_installed_apps()
 
         return self.data
 
@@ -77,7 +87,30 @@ class GCollector():
         else:
             self.data["Flatpak installed"] = False
 
-    # TODO: List of all installed apps
+    def _get_installed_apps(self):
+        if HAVE_MALCONTENT:
+            stdout = GLib.spawn_command_line_sync('id -u')[1].decode()
+            manager = Malcontent.Manager(
+                connection=Gio.bus_get_sync(Gio.BusType.SYSTEM, None)
+            )
+            try:
+                app_filter = manager.get_app_filter(
+                    int(stdout),
+                    Malcontent.ManagerGetValueFlags.NONE,
+                    None
+                )
+            except Exception:
+                raise
+        else:
+            app_filter = None
+
+        apps = []
+        for a in Gio.AppInfo.get_all():
+            if a.should_show() and (not app_filter or app_filter.is_appinfo_allowed(a)):
+                apps.append(re.sub(".desktop", "", a.get_id()))
+
+        self.data["Installed apps"] = apps
+
     # TODO: List of favourited apps in GNOME Dash
     # TODO: List of setup online accounts
     # TODO: Sharing settings
@@ -142,7 +175,7 @@ def present_collected_data(data: dict):
         else:
             print(f"**{key}**{(MAX_LEN-len(key)+4)*' '}{value}")
 
-    print("\nThis information will be collected anonymously and will be used" +
+    print("\nThis information will be collected anonymously and will be used",
           "to help improve the GNOME project.\n")
 
 
@@ -227,7 +260,7 @@ def main():
         print("Error loading json data: invalid format.")
         raise
 
-    print(output)
+    print(data)
     exit(0)
 
     present_collected_data(data)
