@@ -5,15 +5,15 @@
     "description": "System information for the gnome-info-collect project",
     "type": "object",
     "properties": {
-        "Operating System": {
+        "Operating system": {
             "description": "Operating system name and version",
             "type": "string"
         },
-        "Hardware Vendor": {
+        "Hardware vendor": {
             "description": "Manufacturer of the machine",
             "type": "string"
         },
-        "Hardware Model": {
+        "Hardware model": {
             "description": "Model and variant of the machine",
             "type": "string"
         },
