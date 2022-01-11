@@ -43,6 +43,7 @@ class GCollector():
         self._get_hw_os_info()
         self._get_flatpak_info()
         self._get_installed_apps()
+        self._get_favourited_apps()
 
         return self.data
 
@@ -111,7 +112,12 @@ class GCollector():
 
         self.data["Installed apps"] = apps
 
-    # TODO: List of favourited apps in GNOME Dash
+    def _get_favourited_apps(self):
+        favs = []
+        for f in Gio.Settings(schema_id="org.gnome.shell").get_value("favorite-apps"):
+            favs.append(str(re.sub(".desktop", "", f)))
+        self.data["Favourited apps"] = favs
+
     # TODO: List of setup online accounts
     # TODO: Sharing settings
     #   TODO: File sharing (DAV)
