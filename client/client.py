@@ -13,7 +13,9 @@ import re
 import json
 
 import gi
-from gi.repository import GLib, Gio
+
+gi.require_version('Goa', '1.0')
+from gi.repository import GLib, Gio, Goa
 
 # Older GNOME (<41) compatibility
 try:
@@ -44,6 +46,7 @@ class GCollector():
         self._get_flatpak_info()
         self._get_installed_apps()
         self._get_favourited_apps()
+        self._get_online_accounts()
 
         return self.data
 
@@ -118,7 +121,16 @@ class GCollector():
             favs.append(str(re.sub(".desktop", "", f)))
         self.data["Favourited apps"] = favs
 
-    # TODO: List of setup online accounts
+    def _get_online_accounts(self):
+        goa_client = Goa.Client.new_sync(None)
+        acc_objects = goa_client.get_accounts()
+
+        accounts = []
+        for acc in acc_objects:
+            accounts.append(acc.get_account().props.provider_name)  # or provider_type
+
+        self.data["Online accounts"] = accounts
+
     # TODO: Sharing settings
     #   TODO: File sharing (DAV)
     #   TODO: Remote desktop (VNC)
