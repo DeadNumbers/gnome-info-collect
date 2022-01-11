@@ -47,6 +47,7 @@ class GCollector():
         self._get_installed_apps()
         self._get_favourited_apps()
         self._get_online_accounts()
+        self._get_sharing_settings()
 
         return self.data
 
@@ -64,32 +65,35 @@ class GCollector():
             raise
 
     def _get_flatpak_info(self):
-        flatpak_retval = subprocess.run(
-            "flatpak", shell=False, stderr=subprocess.DEVNULL
-        ).returncode
-        flatpak_installed = False if flatpak_retval == 127 else True
+        try:
+            flatpak_retval = subprocess.run(
+                "flatpak", shell=False, stderr=subprocess.DEVNULL
+            ).returncode
+            flatpak_installed = False if flatpak_retval == 127 else True
 
-        if flatpak_installed:
-            self.data["Flatpak installed"] = True
+            if flatpak_installed:
+                self.data["Flatpak installed"] = True
 
-            # Flathub (enabled, filtered, disabled)
-            flatpak_remotes = subprocess.run(
-                ["flatpak", "remotes", "--columns", "url,filter"],
-                shell=False, capture_output=True
-            ).stdout.decode()
-            flathub = re.search(
-                '(https://dl.flathub.org/repo/)\s*(\S*)',
-                flatpak_remotes)
+                # Flathub (enabled, filtered, disabled)
+                flatpak_remotes = subprocess.run(
+                    ["flatpak", "remotes", "--columns", "url,filter"],
+                    shell=False, capture_output=True
+                ).stdout.decode()
+                flathub = re.search(
+                    '(https://dl.flathub.org/repo/)\s*(\S*)',
+                    flatpak_remotes)
 
-            if flathub:
-                if flathub.group(2) == "-":
-                    self.data["Flathub enabled"] = True
+                if flathub:
+                    if flathub.group(2) == "-":
+                        self.data["Flathub enabled"] = True
+                    else:
+                        self.data["Flathub enabled"] = "filtered"
                 else:
-                    self.data["Flathub enabled"] = "filtered"
+                    self.data["Flathub enabled"] = False
             else:
-                self.data["Flathub enabled"] = False
-        else:
-            self.data["Flatpak installed"] = False
+                self.data["Flatpak installed"] = False
+        except subprocess.CalledProcessError:
+            raise
 
     def _get_installed_apps(self):
         if HAVE_MALCONTENT:
@@ -131,13 +135,48 @@ class GCollector():
 
         self.data["Online accounts"] = accounts
 
-    # TODO: Sharing settings
-    #   TODO: File sharing (DAV)
-    #   TODO: Remote desktop (VNC)
-    #     TODO: gnome-remote-desktop
-    #     TODO: vino-server
-    #   TODO: Multimedia sharing
-    #   TODO: Remote login (SSH)
+    def _fetch_sharing_setting(self, service: str) -> bool:
+        schema = "org.gnome.settings-daemon.plugins.sharing.service"
+        path_base = "/org/gnome/settings-daemon/plugins/sharing/"
+
+        setting = Gio.Settings.new_with_path(
+            schema,
+            path_base + service + "/"
+        ).get_value("enabled-connections")
+        return False if str(setting) == "@as []" else True
+
+    def _get_sharing_settings(self):
+        # File sharing (DAV)
+        if self._fetch_sharing_setting("gnome-user-share-webdav"):
+            self.data["File sharing"] = "active"
+        else:
+            self.data["File sharing"] = "inactive"
+
+        # Remote desktop (VNC)
+        # Need to check both gnome-remote-desktop and vino-server
+        grd_on = self._fetch_sharing_setting("gnome-remote-desktop")
+        vino_on = self._fetch_sharing_setting("vino-server")
+        if (grd_on or vino_on):
+            self.data["Remote desktop"] = "active"
+        else:
+            self.data["Remote desktop"] = "inactive"
+
+        # Multimedia sharing
+        if self._fetch_sharing_setting("rygel"):
+            self.data["Multimedia sharing"] = "active"
+        else:
+            self.data["Multimedia sharing"] = "inactive"
+
+        # Remote login (SSH)
+        try:
+            sshd_status = subprocess.run(
+                ["systemctl", "is-active", "sshd"],
+                shell=False, capture_output=True
+            ).stdout.decode().strip()
+            self.data["Remote login"] = sshd_status
+        except subprocess.CalledProcessError:
+            raise
+
     # TODO: Workspaces only on primary
     # TODO: Workspaces dynamic
     # TODO: Number of user accounts
