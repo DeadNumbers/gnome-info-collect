@@ -6,9 +6,10 @@
 #
 #  Copyright 2022 vstanek <vstanek@redhat.com>
 
-import subprocess
 import requests
 import os
+import subprocess
+import re
 import json
 
 from gi.repository import GLib
@@ -17,6 +18,80 @@ from gi.repository import GLib
 USER_DIR = GLib.get_user_data_dir()
 APP_DIR = USER_DIR + '/gnome-info-collect'
 STATUS_FILE = APP_DIR + '/uploaded'
+
+
+class GCollector():
+    """Class housing methods for collecting information for the
+    gnome-info-collect project.
+    """
+
+    def __init__(self):
+        self.data = dict()
+
+    def collect_data(self) -> dict:
+        """Collects data and returns it in a dictionary"""
+
+        self._get_hw_os_info()
+        self._get_flatpak_info()
+
+        return self.data
+
+    def _get_hw_os_info(self):
+        try:
+            hw_os_info = subprocess.run(
+                ["hostnamectl", "--json=pretty"],
+                shell=False, capture_output=True, check=True
+            ).stdout.decode()
+            hw_os_info = dict(json.loads(hw_os_info))
+            self.data["Operating system"] = hw_os_info["OperatingSystemPrettyName"]
+            self.data["Hardware vendor"] = hw_os_info["HardwareVendor"]
+            self.data["Hardware model"] = hw_os_info["HardwareModel"]
+        except subprocess.CalledProcessError:
+            raise
+
+    def _get_flatpak_info(self):
+        flatpak_retval = subprocess.run(
+            "flatpak", shell=False, stderr=subprocess.DEVNULL
+        ).returncode
+        flatpak_installed = False if flatpak_retval == 127 else True
+
+        if flatpak_installed:
+            self.data["Flatpak installed"] = True
+
+            # Flathub (enabled, filtered, disabled)
+            flatpak_remotes = subprocess.run(
+                ["flatpak", "remotes", "--columns", "url,filter"],
+                shell=False, capture_output=True
+            ).stdout.decode()
+            flathub = re.search(
+                '(https://dl.flathub.org/repo/)\s*(\S*)',
+                flatpak_remotes)
+
+            if flathub:
+                if flathub.group(2) == "-":
+                    self.data["Flathub enabled"] = True
+                else:
+                    self.data["Flathub enabled"] = "filtered"
+            else:
+                self.data["Flathub enabled"] = False
+        else:
+            self.data["Flatpak installed"] = False
+
+    # TODO: List of all installed apps
+    # TODO: List of favourited apps in GNOME Dash
+    # TODO: List of setup online accounts
+    # TODO: Sharing settings
+    #   TODO: File sharing (DAV)
+    #   TODO: Remote desktop (VNC)
+    #     TODO: gnome-remote-desktop
+    #     TODO: vino-server
+    #   TODO: Multimedia sharing
+    #   TODO: Remote login (SSH)
+    # TODO: Workspaces only on primary
+    # TODO: Workspaces dynamic
+    # TODO: Number of user accounts
+    # TODO: Default browser
+    # TODO: List of enabled GNOME extensions
 
 
 def create_status_file():
@@ -40,16 +115,6 @@ def check_already_uploaded():
         print("Information was already successfuly uploaded.")
         print("Not collecting or sending any data, exiting...")
         exit(0)
-
-
-def collect_data() -> dict:
-    # ~ Run the script and get the info
-    try:
-        json_output = subprocess.run(os.path.dirname(os.path.abspath(__file__)) + "/gnome-info-collect.sh", shell=False, capture_output=True, check=True).stdout
-        return json_output
-    except subprocess.CalledProcessError as e:
-        print(f"Error collecting data!\nExit code: {e.returncode}\nOuptut: {e.output}")
-        raise
 
 
 def present_collected_data(data: dict):
@@ -154,13 +219,16 @@ def main():
 
     check_already_uploaded()
 
-    output = collect_data()
+    output = GCollector().collect_data()
     # ~ Validate the data and convert to dict-like format for better processing
     try:
-        data = json.loads(output)
+        data = json.dumps(output)
     except ValueError:
         print("Error loading json data: invalid format.")
         raise
+
+    print(output)
+    exit(0)
 
     present_collected_data(data)
 
