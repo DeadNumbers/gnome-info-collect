@@ -13,6 +13,7 @@ import re
 import json
 import pwd
 import webbrowser
+import hashlib
 
 import gi
 
@@ -54,6 +55,7 @@ class GCollector():
         self._get_number_of_users()
         self._get_default_browser()
         self._get_enabled_extensions()
+        self._get_salted_machine_id_hash()
 
         return self.data
 
@@ -234,6 +236,14 @@ class GCollector():
             enabled_extensions_list.append(str(ext))
 
         self.data["Enabled extensions"] = enabled_extensions_list
+
+    def _get_salted_machine_id_hash(self):
+        hash = ""
+        with open("/etc/machine-id") as f:
+            hash = hashlib.sha256(
+                ("gnome-info-collect" + f.read() + os.getlogin()).encode()
+            ).hexdigest()
+        self.data["Unique ID"] = hash
 
 
 def create_status_file():
