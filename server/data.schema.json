@@ -1,0 +1,95 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://gitlab.gnome.org/vstanek/gnome-info-collect/-/blob/master/server/data.schema.json",
+    "title": "Data",
+    "description": "System information for the gnome-info-collect project",
+    "type": "object",
+    "properties": {
+        "Operating system": {
+            "description": "Operating system name and version",
+            "type": "string"
+        },
+        "Hardware vendor": {
+            "description": "Manufacturer of the machine",
+            "type": "string"
+        },
+        "Hardware model": {
+            "description": "Model and variant of the machine",
+            "type": "string"
+        },
+        "Flatpak installed": {
+            "description": "Indicates whether flatpak is installed on the system",
+            "type": "boolean"
+        },
+        "Flathub enabled": {
+            "description": "Indicates whether flathub remote is enabled, disabled or filtered",
+            "type": ["boolean", "string"]
+        },
+        "Installed apps": {
+            "description": "Array of installed applications",
+            "type": ["array", "string"],
+            "items": {
+                "type": "string"
+            },
+            "minItems": 1,
+            "uniqueItems": true
+        },
+        "Favourited apps": {
+            "description": "Array of favourited apps (in dash)",
+            "type": ["array", "string"],
+            "items": {
+                "type": "string"
+            },
+            "uniqueItems": true
+        },
+        "Online accounts": {
+            "description": "Array of set-up GNOME online accounts",
+            "type": ["array", "string"],
+            "items": {
+                "type": "string"
+            }
+        },
+        "File sharing": {
+            "description": "Indicates whether file sharing is active",
+            "type": "string"
+        },
+        "Remote desktop": {
+            "description": "Indicates whether remote desktop is active",
+            "type": "string"
+        },
+        "Multimedia sharing": {
+            "description": "Indicates whether multimedia sharing is active",
+            "type": "string"
+        },
+        "Remote login": {
+            "description": "Indicates whether remote login is active",
+            "type": "string"
+        },
+        "Workspaces only on primary": {
+            "description": "Indicates whether workspaces are set only for primary display",
+            "type": ["boolean", "string"]
+        },
+        "Workspaces dynamic": {
+            "description": "Indicates whether number of workspaces is dynamic",
+            "type": ["boolean", "string"]
+        },
+        "Number of users": {
+            "description": "Number of user accounts",
+            "type": "integer"
+        },
+        "Default browser": {
+            "description": "User's default browser",
+            "type": "string"
+        },
+        "Enabled extensions": {
+            "description": "Array of enabled GNOME extansions",
+            "type": "array",
+            "items": {
+                "type": "string"
+            },
+            "uniqueItems": true
+        }
+    },
+    "additionalProperties": false,
+    "minProperties": 17
+}
