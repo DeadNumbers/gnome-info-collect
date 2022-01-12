@@ -12,6 +12,7 @@ import subprocess
 import re
 import json
 import pwd
+import webbrowser
 
 import gi
 
@@ -51,6 +52,8 @@ class GCollector():
         self._get_sharing_settings()
         self._get_workspaces_status()
         self._get_number_of_users()
+        self._get_default_browser()
+        self._get_enabled_extensions()
 
         return self.data
 
@@ -218,8 +221,19 @@ class GCollector():
 
         self.data["Number of users"] = count
 
-    # TODO: Default browser
-    # TODO: List of enabled GNOME extensions
+    def _get_default_browser(self):
+        self.data["Default browser"] = webbrowser.get().name
+
+    def _get_enabled_extensions(self):
+        enabled_extensions_list = []
+        enabled_ext_setting = Gio.Settings(
+            schema_id="org.gnome.shell"
+        ).get_value("enabled-extensions")
+
+        for ext in enabled_ext_setting:
+            enabled_extensions_list.append(str(ext))
+
+        self.data["Enabled extensions"] = enabled_extensions_list
 
 
 def create_status_file():
