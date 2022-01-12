@@ -11,6 +11,7 @@ import os
 import subprocess
 import re
 import json
+import pwd
 
 import gi
 
@@ -49,6 +50,7 @@ class GCollector():
         self._get_online_accounts()
         self._get_sharing_settings()
         self._get_workspaces_status()
+        self._get_number_of_users()
 
         return self.data
 
@@ -193,7 +195,29 @@ class GCollector():
         )
         self.data["Workspaces dynamic"] = bool(workspaces_dynamic)
 
-    # TODO: Number of user accounts
+    def _get_number_of_users(self):
+        count = 0
+        uid_min, uid_max = None, None
+
+        if os.path.exists('/etc/login.defs'):
+            with open("/etc/login.defs") as f:
+                content = f.readlines()
+            for line in content:
+                if line.startswith('UID_MIN'):
+                    uid_min = int(line.split()[1].strip())
+
+                if line.startswith('UID_MAX'):
+                    uid_max = int(line.split()[1].strip())
+        else:
+            uid_min = 1000
+            uid_max = 60000
+
+        for user in pwd.getpwall():
+            if user.pw_uid >= uid_min and user.pw_uid <= uid_max:
+                count += 1
+
+        self.data["Number of users"] = count
+
     # TODO: Default browser
     # TODO: List of enabled GNOME extensions
 
