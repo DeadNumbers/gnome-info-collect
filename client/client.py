@@ -364,21 +364,18 @@ def main():
     output = GCollector().collect_data()
     # ~ Validate the data and convert to dict-like format for better processing
     try:
-        data = json.dumps(output)
+        json.dumps(output)
     except ValueError:
         print("Error loading json data: invalid format.")
         raise
 
-    print(data)
-    exit(0)
-
-    present_collected_data(data)
+    present_collected_data(output)
 
     if not get_permission():
         print("Exiting...")
         return
 
-    if upload_data(ADDRESS, data):
+    if upload_data(ADDRESS, output):
         # ~ Data successfully uploaded, finish
         print("Complete! Thank you for helping to improve GNOME.")
 
