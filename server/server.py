@@ -8,7 +8,6 @@
 
 from http.server import ThreadingHTTPServer, BaseHTTPRequestHandler
 from pathlib import Path
-from time import time
 import json
 import jsonschema
 
@@ -31,17 +30,17 @@ class RequestHandler(BaseHTTPRequestHandler):
         # ~ Debug
         # ~ print(f"Recieved data:\n{data}")
         try:
-            self._validate_post_data(data)
+            id = self._validate_post_data(data)
         except (ValueError, jsonschema.exceptions.ValidationError):
             raise
 
-        # ~ Get to parent directory and create a file in the folder 'data'
-        with open(
-            str(Path(__file__).parent.parent.absolute()) +
-            "/data/" + f"data_{time()}.json",
-            "w"
-        ) as f:
-            f.write(data)
+        # ~ Create a file in the folder 'data'
+        data_file_path = "/app/data/" + id + ".json"
+        if Path(data_file_path).exists():
+            raise FileExistsError
+        else:
+            with open(data_file_path, "w") as f:
+                f.write(data)
 
     def _validate_post_data(self, data):
         try:
@@ -53,9 +52,10 @@ class RequestHandler(BaseHTTPRequestHandler):
                 json_data = json.loads(data)
 
                 jsonschema.validate(instance=json_data, schema=json_schema)
-
         except (ValueError, jsonschema.exceptions.ValidationError):
             raise
+
+        return json_data["Unique ID"]
 
     def do_GET(self):
         self._set_OK_response()
@@ -70,9 +70,12 @@ class RequestHandler(BaseHTTPRequestHandler):
             self._set_invalid_data_response()
             self.wfile.write("Error: Invalid data received\n".encode())
             raise
-
-        self._set_OK_response()
-        self.wfile.write("Data received successfully\n".encode())
+        except FileExistsError:
+            self._set_OK_response()
+            self.wfile.write("Your data was already collected\n".encode())
+        else:
+            self._set_OK_response()
+            self.wfile.write("Data received successfully\n".encode())
 
 
 def main():

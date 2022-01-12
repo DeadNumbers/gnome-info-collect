@@ -27,7 +27,7 @@
         },
         "Installed apps": {
             "description": "Array of installed applications",
-            "type": ["array", "string"],
+            "type": "array",
             "items": {
                 "type": "string"
             },
@@ -36,7 +36,7 @@
         },
         "Favourited apps": {
             "description": "Array of favourited apps (in dash)",
-            "type": ["array", "string"],
+            "type": "array",
             "items": {
                 "type": "string"
             },
@@ -44,7 +44,7 @@
         },
         "Online accounts": {
             "description": "Array of set-up GNOME online accounts",
-            "type": ["array", "string"],
+            "type": "array",
             "items": {
                 "type": "string"
             }
@@ -67,11 +67,11 @@
         },
         "Workspaces only on primary": {
             "description": "Indicates whether workspaces are set only for primary display",
-            "type": ["boolean", "string"]
+            "type": "boolean"
         },
         "Workspaces dynamic": {
             "description": "Indicates whether number of workspaces is dynamic",
-            "type": ["boolean", "string"]
+            "type": "boolean"
         },
         "Number of users": {
             "description": "Number of user accounts",
@@ -82,12 +82,16 @@
             "type": "string"
         },
         "Enabled extensions": {
-            "description": "Array of enabled GNOME extansions",
+            "description": "Array of enabled GNOME extensions",
             "type": "array",
             "items": {
                 "type": "string"
             },
             "uniqueItems": true
+        },
+        "Unique ID": {
+            "description": "Salted hash of machine id and username for dedoupling",
+            "type": "string"
         }
     },
     "additionalProperties": false,
