@@ -60,17 +60,21 @@ class GCollector():
         return self.data
 
     def _get_hw_os_info(self):
-        try:
-            hw_os_info = subprocess.run(
-                ["hostnamectl", "--json=pretty"],
-                shell=False, capture_output=True, check=True
-            ).stdout.decode()
-            hw_os_info = dict(json.loads(hw_os_info))
-            self.data["Operating system"] = hw_os_info["OperatingSystemPrettyName"]
-            self.data["Hardware vendor"] = hw_os_info["HardwareVendor"]
-            self.data["Hardware model"] = hw_os_info["HardwareModel"]
-        except subprocess.CalledProcessError:
-            raise
+        # hostnamectl --json=pretty doesn't work on older systems
+        hw_os_info = subprocess.run(
+            "hostnamectl",
+            shell=False, capture_output=True, check=True
+        ).stdout.decode()
+
+        for i in ("Operating System", "Hardware Vendor", "Hardware Model"):
+            try:
+                res = re.search(f"{i}: (.*)$", hw_os_info, re.MULTILINE)
+                if res is not None:
+                    self.data[i.capitalize()] = res[1]
+                else:
+                    raise IndexError
+            except IndexError:
+                self.data[i.capitalize()] = "Error"
 
     def _get_flatpak_info(self):
         try:
