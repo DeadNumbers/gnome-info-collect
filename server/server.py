@@ -8,8 +8,10 @@
 
 from http.server import ThreadingHTTPServer, BaseHTTPRequestHandler
 from pathlib import Path
+from datetime import date
 import json
 import jsonschema
+import os
 
 
 class RequestHandler(BaseHTTPRequestHandler):
@@ -34,15 +36,20 @@ class RequestHandler(BaseHTTPRequestHandler):
         except (ValueError, jsonschema.exceptions.ValidationError):
             raise
 
-        # ~ Create a file in the folder 'data'
-        data_file_path = "/app/data/" + id + ".json"
-        if Path(data_file_path).exists():
+        # ~ Create a file in folder of today's date
+        dir_path = f"/app/data/{str(date.today())}"
+        file_path = f"{dir_path}/{id}.json"
+
+        if not Path(dir_path).exists():
+            os.mkdir(dir_path)
+
+        if Path(file_path).exists():
             raise FileExistsError
         else:
-            with open(data_file_path, "w") as f:
+            with open(file_path, "w") as f:
                 f.write(data)
 
-    def _validate_post_data(self, data):
+    def _validate_post_data(self, data) -> str:
         try:
             with open(
                 str(Path(__file__).with_name("data.schema.json")),
