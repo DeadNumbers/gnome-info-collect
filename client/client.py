@@ -104,8 +104,12 @@ class GCollector():
                     self.data["Flathub enabled"] = False
             else:
                 self.data["Flatpak installed"] = False
+                self.data["Flathub enabled"] = False
         except subprocess.CalledProcessError:
             raise
+        except FileNotFoundError:
+            self.data["Flatpak installed"] = False
+            self.data["Flathub enabled"] = False
 
     def _get_installed_apps(self):
         if HAVE_MALCONTENT:
