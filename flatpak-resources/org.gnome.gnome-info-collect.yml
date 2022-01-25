@@ -1,0 +1,31 @@
+app-id: org.gnome.gnome-info-collect
+runtime: org.gnome.Platform
+runtime-version: '41'
+sdk: org.gnome.Sdk
+command: runner.sh
+finish-args: 
+  - --share=network
+  - --talk-name=org.freedesktop.Flatpak
+modules:
+  - python-dependencies.json
+
+  - name: gnome-online-accounts
+    config-opts:
+      - --disable-telepathy
+      - --disable-documentation
+      - --disable-backend
+      - --disable-Werror
+    sources:
+      - type: git
+        url: https://gitlab.gnome.org/GNOME/gnome-online-accounts.git
+
+  - name: runner
+    buildsystem: simple
+    build-commands:
+      - install -D runner.sh /app/bin/runner.sh
+      - install -D client.py /app/client.py
+    sources:
+      - type: file
+        path: runner.sh
+      - type: file
+        path: ../client/client.py
