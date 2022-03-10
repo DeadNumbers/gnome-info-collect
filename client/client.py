@@ -12,7 +12,6 @@ import subprocess
 import re
 import json
 import pwd
-import webbrowser
 import hashlib
 
 import gi
@@ -232,7 +231,8 @@ class GCollector():
         self.data["Number of users"] = count
 
     def _get_default_browser(self):
-        self.data["Default browser"] = webbrowser.get().name
+        self.data["Default browser"] = Gio.AppInfo.get_default_for_type(
+            "x-scheme-handler/https", False).get_display_name()
 
     def _get_enabled_extensions(self):
         enabled_extensions_list = []
