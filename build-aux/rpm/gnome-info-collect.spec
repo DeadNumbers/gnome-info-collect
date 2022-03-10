@@ -6,7 +6,7 @@
 Summary: A simple utility to collect system information.
 Name: %{name}
 Version: %{version}
-Release: %{release}
+Release: %{release}%{?dist}
 Source0: %{name}-%{unmangled_version}.tar.gz
 License: GPLv3+
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-buildroot
@@ -19,6 +19,7 @@ Requires: python3-pip
 Requires: python3-requests
 Requires: python3-gobject
 Requires: gnome-online-accounts
+BuildRequires: python3
 
 %description
 A GNOME system and user data collection tool. The collected data is anonymous and is sent to a secure server. The data will be used only for the purpose of enhancing usability and user experience of GNOME.
@@ -35,7 +36,6 @@ mkdir -p %{buildroot}/usr/lib/%{name}
 
 cat > %{buildroot}%{_bindir}/%{name} <<-EOF
 #!/bin/bash
-pip install requests
 /usr/bin/python /usr/lib/%{name}/%{name}.py
 EOF
 
