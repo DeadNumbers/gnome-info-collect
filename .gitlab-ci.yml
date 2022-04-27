@@ -1,0 +1,9 @@
+include:
+  - project: 'Infrastructure/openshift-images/ci-templates'
+    file: '/kaniko.yml'
+
+server:
+  extends:
+    - .kaniko-monorepo
+  variables:
+    CI_PROJECT_NAME: gnome-info-collect-server
