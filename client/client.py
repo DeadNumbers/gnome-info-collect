@@ -29,8 +29,8 @@ except (ValueError, ImportError):
 
 # ~ User application data directory and status file
 USER_DIR = GLib.get_user_data_dir()
-APP_DIR = USER_DIR + '/gnome-info-collect'
-STATUS_FILE = APP_DIR + '/uploaded'
+APP_DIR = os.path.join(USER_DIR, 'gnome-info-collect')
+STATUS_FILE = os.path.join(APP_DIR, 'uploaded')
 
 
 class GCollector():
