@@ -91,7 +91,7 @@ class GCollector():
                     shell=False, capture_output=True
                 ).stdout.decode()
                 flathub = re.search(
-                    '(https://dl.flathub.org/repo/)\s*(\S*)',
+                    r'(https://dl.flathub.org/repo/)\s*(\S*)',
                     flatpak_remotes)
 
                 if flathub:
