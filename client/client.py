@@ -112,13 +112,12 @@ class GCollector():
 
     def _get_installed_apps(self):
         if HAVE_MALCONTENT:
-            stdout = GLib.spawn_command_line_sync('id -u')[1].decode()
             manager = Malcontent.Manager(
                 connection=Gio.bus_get_sync(Gio.BusType.SYSTEM, None)
             )
             try:
                 app_filter = manager.get_app_filter(
-                    int(stdout),
+                    os.getuid(),
                     Malcontent.ManagerGetValueFlags.NONE,
                     None
                 )
