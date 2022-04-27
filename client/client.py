@@ -17,7 +17,7 @@ import hashlib
 import gi
 
 gi.require_version('Goa', '1.0')
-from gi.repository import GLib, Gio, Goa
+from gi.repository import GLib, Gio, Goa, AccountsService
 
 # Older GNOME (<41) compatibility
 try:
@@ -207,25 +207,7 @@ class GCollector():
         self.data["Workspaces dynamic"] = bool(workspaces_dynamic)
 
     def _get_number_of_users(self):
-        count = 0
-        uid_min, uid_max = None, None
-
-        if os.path.exists('/etc/login.defs'):
-            with open("/etc/login.defs") as f:
-                content = f.readlines()
-            for line in content:
-                if line.startswith('UID_MIN'):
-                    uid_min = int(line.split()[1].strip())
-
-                if line.startswith('UID_MAX'):
-                    uid_max = int(line.split()[1].strip())
-        else:
-            uid_min = 1000
-            uid_max = 60000
-
-        for user in pwd.getpwall():
-            if user.pw_uid >= uid_min and user.pw_uid <= uid_max:
-                count += 1
+        count = len(AccountsService.UserManager.get_default().list_users())
 
         self.data["Number of users"] = count
 
