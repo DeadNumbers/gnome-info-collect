@@ -6,4 +6,4 @@ server:
   extends:
     - .kaniko-monorepo
   variables:
-    CI_PROJECT_NAME: gnome-info-collect-server
+    CI_CUSTOM_IMAGE_NAME: gnome-info-collect-server
