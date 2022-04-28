@@ -11,12 +11,12 @@ import os
 import subprocess
 import re
 import json
-import pwd
 import hashlib
 
 import gi
 
 gi.require_version('Goa', '1.0')
+gi.require_version('AccountsService', '1.0')
 from gi.repository import GLib, Gio, Goa, AccountsService
 
 # Older GNOME (<41) compatibility
