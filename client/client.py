@@ -129,14 +129,19 @@ class GCollector():
         apps = []
         for a in Gio.AppInfo.get_all():
             if a.should_show() and (not app_filter or app_filter.is_appinfo_allowed(a)):
-                apps.append(re.sub(".desktop", "", a.get_id()))
+                id = a.get_id()
+                if id.endswith(".desktop"):  # Remove .desktop suffix where appropriate
+                    id = id[:-len(".desktop")]
+                apps.append(id)
 
         self.data["Installed apps"] = apps
 
     def _get_favourited_apps(self):
         favs = []
         for f in Gio.Settings(schema_id="org.gnome.shell").get_value("favorite-apps"):
-            favs.append(str(re.sub(".desktop", "", f)))
+            if f.endswith(".desktop"):  # Remove .desktop suffix where appropriate
+                f = f[:-len(".desktop")]
+            favs.append(f)
         self.data["Favourited apps"] = favs
 
     def _get_online_accounts(self):
