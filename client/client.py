@@ -356,7 +356,7 @@ def upload_data(address: str, data: dict) -> bool:
 
 def main():
     # ~ Address of a server to send the data to
-    ADDRESS = "https://gnome-info-collect-gnome-info-collect.openshift.gnome.org"
+    ADDRESS = "https://gnome-info-collect-app.apps.openshift4.gnome.org"
 
     check_already_uploaded()
 
