@@ -1,7 +1,7 @@
 %define name gnome-info-collect
 %define version 1.0
 %define unmangled_version 1.0
-%define release 1
+%define release 2
 
 Summary: A simple utility to collect system information.
 Name: %{name}
