@@ -17,7 +17,7 @@ import hashlib
 import gi
 
 gi.require_version('Goa', '1.0')
-from gi.repository import GLib, Gio, Goa
+from gi.repository import GLib, Gio, Goa, AccountsService
 
 # Older GNOME (<41) compatibility
 try:
@@ -29,8 +29,8 @@ except (ValueError, ImportError):
 
 # ~ User application data directory and status file
 USER_DIR = GLib.get_user_data_dir()
-APP_DIR = USER_DIR + '/gnome-info-collect'
-STATUS_FILE = APP_DIR + '/uploaded'
+APP_DIR = os.path.join(USER_DIR, 'gnome-info-collect')
+STATUS_FILE = os.path.join(APP_DIR, 'uploaded')
 
 
 class GCollector():
@@ -91,7 +91,7 @@ class GCollector():
                     shell=False, capture_output=True
                 ).stdout.decode()
                 flathub = re.search(
-                    '(https://dl.flathub.org/repo/)\s*(\S*)',
+                    r'(https://dl.flathub.org/repo/)\s*(\S*)',
                     flatpak_remotes)
 
                 if flathub:
@@ -112,13 +112,12 @@ class GCollector():
 
     def _get_installed_apps(self):
         if HAVE_MALCONTENT:
-            stdout = GLib.spawn_command_line_sync('id -u')[1].decode()
             manager = Malcontent.Manager(
                 connection=Gio.bus_get_sync(Gio.BusType.SYSTEM, None)
             )
             try:
                 app_filter = manager.get_app_filter(
-                    int(stdout),
+                    os.getuid(),
                     Malcontent.ManagerGetValueFlags.NONE,
                     None
                 )
@@ -208,25 +207,7 @@ class GCollector():
         self.data["Workspaces dynamic"] = bool(workspaces_dynamic)
 
     def _get_number_of_users(self):
-        count = 0
-        uid_min, uid_max = None, None
-
-        if os.path.exists('/etc/login.defs'):
-            with open("/etc/login.defs") as f:
-                content = f.readlines()
-            for line in content:
-                if line.startswith('UID_MIN'):
-                    uid_min = int(line.split()[1].strip())
-
-                if line.startswith('UID_MAX'):
-                    uid_max = int(line.split()[1].strip())
-        else:
-            uid_min = 1000
-            uid_max = 60000
-
-        for user in pwd.getpwall():
-            if user.pw_uid >= uid_min and user.pw_uid <= uid_max:
-                count += 1
+        count = len(AccountsService.UserManager.get_default().list_users())
 
         self.data["Number of users"] = count
 
