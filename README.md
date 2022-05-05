@@ -11,7 +11,12 @@ Packages are available for the following distributions. If a package isn't avail
 ### Fedora, RHEL, CentOS
 
 The [Fedora Copr repo](https://copr.fedorainfracloud.org/coprs/vstanek/gnome-info-collect/ 
-"Fedora Copr - vstanek/gnome-info-collect") is the recommended way to install gnome-info-collect on Fedora, RHEL and CentOS. The Copr page includes instructions for system with and without DNF and Yum (Silverblue/Kinoite).
+"Fedora Copr - vstanek/gnome-info-collect") is the recommended way to install gnome-info-collect on Fedora, RHEL and CentOS. To install, run:
+
+```
+sudo dnf copr enable vstanek/gnome-info-collect
+sudo dnf install gnome-info-collect
+```
 
 ### Arch
 
