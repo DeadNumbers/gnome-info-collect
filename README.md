@@ -1,46 +1,33 @@
-# Gnome-info-collect
+# gnome-info-collect
 
-*Gnome-info-collect* is a simple client-server application used for collecting system information on GNOME systems. The data will be used to improve GNOME, specifically by informing design decisions, influencing where resources are invested and generally help understand users better.
+*gnome-info-collect* is a simple client-server application used for collecting information on GNOME systems. The data will be used to improve GNOME, specifically by informing design decisions, influencing where resources are invested, and generally helping us to understand users better.
 
-Initially, there was an online survey to be conducted, but it quickly became long and challenging to fill, while most of the questions were focusing on some setting of the user’s system. It is easier and **much more reliable** to collect the data using a tool than to depend on the user’s (often inaccurate) responses. Therefore, *gnome-info-collect* was made.
+Help is wanted with packaging and the installation instructions - please create merge requests if there are mistakes or omissions!
 
-# Installation instructions
+## How to install
 
-There are three possible ways to install *gnome-info-collect*:
-1. using your distribution's package manager (fastest)
-2. manual install using an installation package (rpm)
-3. manually run from source
-
-## Install using package manager
+Packages are available for the following distributions. If a package isn't available for your distro, see below for manual installation options.
 
 ### Fedora, RHEL, CentOS
 
-An up-to-date release is per convenience in a 
-[Fedora Copr repo](https://copr.fedorainfracloud.org/coprs/vstanek/gnome-info-collect/ 
-"Fedora Copr - vstanek/gnome-info-collect"). There are instalation instructions for both dnf/yum distros and for systems without dnf/yum (Silverblue/Kinoite).
+The [Fedora Copr repo](https://copr.fedorainfracloud.org/coprs/vstanek/gnome-info-collect/ 
+"Fedora Copr - vstanek/gnome-info-collect") is the recommended way to install gnome-info-collect on Fedora, RHEL and CentOS. The Copr page includes instructions for system with and without DNF and Yum (Silverblue/Kinoite).
 
-### Other distributions
+### Arch
 
-Currently looking for packagers to create their distribution package for *gnome-info-collect*.
-After doing so, please, submit a merge request with installation instructions.
+See https://archlinux.org/packages/extra/any/gnome-info-collect/
 
-## Manual install using installation package (rpm)
+### openSUSE
 
-There is always an up-to-date rpm package of *gnome-info-collect* in the 
-[Releases page](https://gitlab.gnome.org/vstanek/gnome-info-collect/-/releases "gnome-info-collect releases"). Download it and use it for manual install. Follow your distribution instructions for installing the rpm.
+See https://build.opensuse.org/package/show/GNOME:Next/gnome-info-collect
 
-## Manual run from source
+## How to run
 
-There is also an up-to-date tarball of *gnome-info-collect* in the 
-[Releases page](https://gitlab.gnome.org/vstanek/gnome-info-collect/-/releases "gnome-info-collect releases"), which you can use for running from source. 
+Once gnome-info-collect is installed, just run `gnome-info-collect` from the Terminal.
 
-The tarball contains a client application written in Python. Therefore, you need Python 3 (3.6 or newer) installed on your system. In addition to libraries contained in a standart python installation, it requires the `requests` package, which you can install by running `python -m pip install requests` in your terminal.
+## How it works
 
-Then, simply run the app by running `python client.py` in your terminal.
-
-# How it works
-
-## Client & collected information
+### Client & collected information
 
 The client can be run on any GNOME system, where it collects the following data:
 
@@ -65,10 +52,10 @@ The client can be run on any GNOME system, where it collects the following data:
 - Workspaces settings
   - primary/all displays
   - dynamic/static
-- Number of user on the system
+- Number of users on the system
 - Default browser
 - Enabled GNOME extensions
-- [Salted hash](https://en.wikipedia.org/wiki/Salt_(cryptography) "Wikipedia - Salt (crptography)") of machine ID+username for de-doubling purposes
+- [Salted hash](https://en.wikipedia.org/wiki/Salt_(cryptography) "Wikipedia - Salt (crptography)") of machine ID+username for de-duplication
 
 After the collection, the data is presented to the user for both confirmation and legal consent and then securely sent to a server for processing.
 
@@ -76,22 +63,40 @@ There is a check to prevent users running *gnome-info-collect* multiple times. I
 again, after a successful previous attempt, no collection takes place and an info message is 
 displayed instead.
 
-## Server side
+### Server side
 
 The server lives on GNOME OpenShift, recently migrated to version 4. When data is recieved, it is
 validated to prevent junk from clogging the server. Then it is checked whether the specific data 
 was not already recieved to prevent users from sending it multiple times. 
 If the data is valid and was not previously submitted, it is saved for follow-up processing.
 
-## Data security
+### Data security
 
-The collected data is completely anonymous and will be used only for the purpose of enhancing usability 
+The collected data is completely anonymous and will be used only for the purpose of enhancing the usability 
 and user experience of GNOME. Some of the steps to ensure anonymity include not collecting any personal 
 information, such as username or email address, only system settings and some hardware properties. 
 Additionally, some not needed data are deliberately discarded, such as the IP address of the sender and 
 precise time of receiving the data.
 
 As mentioned, to prevent double-sending, the client collects a 
-[Salted hash](https://en.wikipedia.org/wiki/Salt_(cryptography) "Wikipedia - Salt (crptography)") of 
+[salted hash](https://en.wikipedia.org/wiki/Salt_(cryptography) "Wikipedia - Salt (crptography)") of 
 machine ID+username. It is **not possible** to get any information by receiving the hash code. All of this 
 ensures that the data is confidential and untraceable.
+
+## Manual installation
+
+If a package isn't available for your distribution, the following options are available.
+
+### Manually install an RPM
+
+RPM packages of *gnome-info-collect* releases can be found in the 
+[releases page](https://gitlab.gnome.org/vstanek/gnome-info-collect/-/releases "gnome-info-collect releases"). Follow your distribution instructions for installing the RPM.
+
+### Manually run from source
+
+Tarballs of *gnome-info-collect* releases can be found on the 
+[releases page](https://gitlab.gnome.org/vstanek/gnome-info-collect/-/releases "gnome-info-collect releases"), which you can use for running from source. 
+
+The tarball contains a client application written in Python. Therefore, you need Python 3 (3.6 or newer) installed on your system. In addition to libraries contained in a standard Python installation, it requires the `requests` package, which you can install by running `python -m pip install requests` in your terminal.
+
+Then, simply run the app by running `python client.py` in your terminal.
