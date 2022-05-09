@@ -1,13 +1,12 @@
 %define name gnome-info-collect
 %define version 1.0
-%define unmangled_version 1.0
-%define release 2
+%define release 3
 
 Summary: A simple utility to collect system information.
 Name: %{name}
 Version: %{version}
 Release: %{release}%{?dist}
-Source0: %{name}-%{unmangled_version}.tar.gz
+Source0: %{name}-%{version}-%{release}.tar.gz
 License: GPLv3+
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-buildroot
 Prefix: %{_prefix}
@@ -19,36 +18,24 @@ Requires: python3-pip
 Requires: python3-requests
 Requires: python3-gobject
 Requires: gnome-online-accounts
-BuildRequires: python3
+BuildRequires: meson
 
 %description
 A GNOME system and user data collection tool. The collected data is anonymous and is sent to a secure server. The data will be used only for the purpose of enhancing usability and user experience of GNOME.
 
 %prep
-%setup -n %{name}-%{unmangled_version} -q
+%setup -n %{name}-%{version}-%{release} -q
 
 %build
-python3 -m compileall %{name}.py
+%meson
 
 %install
-mkdir -p %{buildroot}/%{_bindir}
-mkdir -p %{buildroot}/usr/lib/%{name}
-
-cat > %{buildroot}%{_bindir}/%{name} <<-EOF
-#!/bin/bash
-/usr/bin/python /usr/lib/%{name}/%{name}.py
-EOF
-
-chmod 0755 %{buildroot}/%{_bindir}/%{name}
-
-install -m 0644 ./%{name}.py* %{buildroot}/usr/lib/%{name}/
+%meson_install
 
 %clean
 rm -rf $RPM_BUILD_ROOT
 
 %files
 %license LICENSE
-%dir /usr/lib/%{name}/
 %{_bindir}/%{name}
-/usr/lib/%{name}/%{name}.py*
 %defattr(-,root,root)
