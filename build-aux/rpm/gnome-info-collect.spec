@@ -6,7 +6,7 @@ Summary: A simple utility to collect system information.
 Name: %{name}
 Version: %{version}
 Release: %{release}%{?dist}
-Source0: %{name}-%{version}-%{release}.tar.gz
+Source0: %{name}-%{version}.tar.gz
 License: GPLv3+
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-buildroot
 Prefix: %{_prefix}
@@ -24,7 +24,7 @@ BuildRequires: meson
 A GNOME system and user data collection tool. The collected data is anonymous and is sent to a secure server. The data will be used only for the purpose of enhancing usability and user experience of GNOME.
 
 %prep
-%setup -n %{name}-%{version}-%{release} -q
+%setup -n %{name}-%{version} -q
 
 %build
 %meson
