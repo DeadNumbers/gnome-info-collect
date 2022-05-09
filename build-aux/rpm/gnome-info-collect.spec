@@ -6,7 +6,7 @@ Summary: A simple utility to collect system information.
 Name: %{name}
 Version: %{version}
 Release: %{release}%{?dist}
-Source0: %{name}-%{version}-%{release}.tar.gz
+Source: {{{ git_dir_pack }}}
 License: GPLv3+
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-buildroot
 Prefix: %{_prefix}
