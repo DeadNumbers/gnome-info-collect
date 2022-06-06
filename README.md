@@ -36,31 +36,22 @@ Once gnome-info-collect is installed, just run `gnome-info-collect` from the Ter
 
 The client can be run on any GNOME system, where it collects the following data:
 
-- Operating system 
-  - distribution
-  - variant
-  - version
-- Hardware
-  - manufacturer/vendor
-  - model
-- Flatpak setup
-  - installed/not installed
-  - flathub status (enabled/filtered/disabled)
-- Installed applications
-- Favourited applications (the ones in dash)
-- Types of GNOME online accounts setup
-- Sharing settings enabled
-  - file sharing (DAV)
-  - remote desktop (VNC)
-  - multimedia sharing
-  - remote login (SSH)
-- Workspaces settings
-  - primary/all displays
-  - dynamic/static
-- Number of users on the system
-- Default browser
-- Enabled GNOME extensions
-- [Salted hash](https://en.wikipedia.org/wiki/Salt_(cryptography) "Wikipedia - Salt (crptography)") of machine ID+username for de-duplication
+| Data             | Research Questions |
+|------------------|--------------------|
+| Distribution, variant, version) | Who is providing data? Is the information influnced by the distribution used? |
+| Hardware (manufacturer/vendor, model)             | Which hardware should GNOME prioritize its support for? |
+| Flatpak installed?                                | To what extent should GNOME Software be designed around Flatpak being available? |
+| Flathub status (enabled/filtered/disabled)        | To what extent should GNOME Software be designed around Flathub being available? |
+| Installed applications                            | Which applications should GNOME prioritise the development of? Are there any 3rd party apps that could be moved to core? |
+| Favourited applications (the ones in dash)        | Is the customizable dash a useful feature? Which apps should be favourited by default? |
+| Types of GNOME online accounts setup              | Which accounts does GNOME need to continue supporting? To what extent is GOA used? |
+| Sharing settings enabled (file sharing (DAV), remote desktop (VNC), multimedia sharing, remote login (SSH)) | Which sharing settings need to continue being part of the Settings app? Which could be moved elsewhere? |
+| Workspaces on primary only/workspaces on all displays | What level of resources should be in invested in workspaces on all displays? |
+| Dynamic/static workspaces                         | What level of resources should be invested in static workspaces? |
+| Number of users on the system                     | Does the multiuser experience deserve more attention? |
+| Default browser                                   | Where should browser integration work be focused? |
+| Enabled GNOME extensions                          | Any changes from extensions that should be considered for the default shell experience? |
+| [Salted hash](https://en.wikipedia.org/wiki/Salt_(cryptography) "Wikipedia - Salt (crptography)") of machine ID+username | Used to de-duplicate responses |
 
 After the collection, the data is presented to the user for both confirmation and legal consent and then securely sent to a server for processing.
 
