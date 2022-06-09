@@ -38,7 +38,7 @@ The client can be run on any GNOME system, where it collects the following data:
 
 | Data             | Research Questions |
 |------------------|--------------------|
-| Distribution, variant, version) | Who is providing data? Is the information influnced by the distribution used? |
+| Distribution, variant, version | Who is providing data? Is the information influnced by the distribution used? |
 | Hardware (manufacturer/vendor, model)             | Which hardware should GNOME prioritize its support for? |
 | Flatpak installed?                                | To what extent should GNOME Software be designed around Flatpak being available? |
 | Flathub status (enabled/filtered/disabled)        | To what extent should GNOME Software be designed around Flathub being available? |
