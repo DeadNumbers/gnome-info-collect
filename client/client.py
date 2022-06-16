@@ -15,9 +15,15 @@ import hashlib
 
 import gi
 
-gi.require_version('Goa', '1.0')
 gi.require_version('AccountsService', '1.0')
-from gi.repository import GLib, Gio, Goa, AccountsService
+from gi.repository import GLib, Gio, AccountsService
+
+try:
+    gi.require_version('Goa', '1.0')
+    from gi.repository import Goa
+    HAVE_GOA = True
+except (ValueError, ImportError):
+    HAVE_GOA = False
 
 # Older GNOME (<41) compatibility
 try:
@@ -145,12 +151,37 @@ class GCollector():
         self.data["Favourited apps"] = favs
 
     def _get_online_accounts(self):
-        goa_client = Goa.Client.new_sync(None)
-        acc_objects = goa_client.get_accounts()
-
         accounts = []
-        for acc in acc_objects:
-            accounts.append(acc.get_account().props.provider_name)  # or provider_type
+
+        if HAVE_GOA:
+            goa_client = Goa.Client.new_sync(None)
+            acc_objects = goa_client.get_accounts()
+
+            for acc in acc_objects:
+                accounts.append(acc.get_account().props.provider_name)  # or provider_type
+        else:
+            goa = Gio.DBusProxy.new_for_bus_sync(
+                Gio.BusType.SESSION,
+                Gio.DBusProxyFlags.NONE,
+                None,
+                "org.gnome.OnlineAccounts",
+                "/org/gnome/OnlineAccounts",
+                "org.freedesktop.DBus.ObjectManager",
+                None,
+            )
+            goa_objects, = goa.call_sync(
+                "GetManagedObjects",
+                None,
+                Gio.DBusCallFlags.NONE,
+                -1,
+                None,
+            ).unpack()
+            for ifaces in goa_objects.values():
+                try:
+                    account_props = ifaces["org.gnome.OnlineAccounts.Account"]
+                    accounts.append(account_props["ProviderName"])
+                except KeyError:
+                    pass
 
         self.data["Online accounts"] = accounts
 
