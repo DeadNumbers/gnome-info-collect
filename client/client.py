@@ -202,11 +202,20 @@ class GCollector():
         else:
             self.data["File sharing"] = "inactive"
 
+        # Remote desktop (RDP) - default in GNOME 42 and newer
+        rdp_schema = "org.gnome.desktop.remote-desktop.rdp"
+        rdp_path = "/org/gnome/desktop/remote-desktop/rdp/"
+        schema_source = Gio.SettingsSchemaSource.get_default()
+        if schema_source.lookup(rdp_schema, False):
+            rdp_on = Gio.Settings.new_with_path(rdp_schema, rdp_path).get_value("enable")
+        else:
+            rdp_on = False
+
         # Remote desktop (VNC)
         # Need to check both gnome-remote-desktop and vino-server
         grd_on = self._fetch_sharing_setting("gnome-remote-desktop")
         vino_on = self._fetch_sharing_setting("vino-server")
-        if (grd_on or vino_on):
+        if (grd_on or vino_on or rdp_on):
             self.data["Remote desktop"] = "active"
         else:
             self.data["Remote desktop"] = "inactive"
