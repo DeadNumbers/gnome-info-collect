@@ -45,7 +45,7 @@ The client can be run on any GNOME system, where it collects the following data:
 | Installed applications                            | Which applications should GNOME prioritise the development of? Are there any 3rd party apps that could be moved to core? |
 | Favourited applications (the ones in dash)        | Is the customizable dash a useful feature? Which apps should be favourited by default? |
 | Types of GNOME online accounts setup              | Which accounts does GNOME need to continue supporting? To what extent is GOA used? |
-| Sharing settings enabled (file sharing (DAV), remote desktop (VNC), multimedia sharing, remote login (SSH)) | Which sharing settings need to continue being part of the Settings app? Which could be moved elsewhere? |
+| Sharing settings enabled (file sharing (DAV), remote desktop (VNC & RDP), multimedia sharing, remote login (SSH)) | Which sharing settings need to continue being part of the Settings app? Which could be moved elsewhere? |
 | Workspaces on primary only/workspaces on all displays | What level of resources should be in invested in workspaces on all displays? |
 | Dynamic/static workspaces                         | What level of resources should be invested in static workspaces? |
 | Number of users on the system                     | Does the multiuser experience deserve more attention? |
