@@ -262,12 +262,29 @@ class GCollector():
 
     def _get_enabled_extensions(self):
         enabled_extensions_list = []
-        enabled_ext_setting = Gio.Settings(
-            schema_id="org.gnome.shell"
-        ).get_value("enabled-extensions")
 
-        for ext in enabled_ext_setting:
-            enabled_extensions_list.append(str(ext))
+        ge = Gio.DBusProxy.new_for_bus_sync(
+            Gio.BusType.SESSION,
+            Gio.DBusProxyFlags.NONE,
+            None,
+            "org.gnome.Shell",
+            "/org/gnome/Shell",
+            "org.gnome.Shell.Extensions",
+            None,
+        )
+        ext_objects, = ge.call_sync(
+            "ListExtensions",
+            None,
+            Gio.DBusCallFlags.NONE,
+            -1,
+            None,
+        ).unpack()
+        for obj in ext_objects.values():
+            try:
+                if obj["state"] == 1.0:
+                    enabled_extensions_list.append(obj["uuid"])
+            except KeyError:
+                pass
 
         self.data["Enabled extensions"] = enabled_extensions_list
 
