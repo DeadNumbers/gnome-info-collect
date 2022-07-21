@@ -128,7 +128,7 @@ class GCollector():
                     None
                 )
             except Exception:
-                raise
+                app_filter = None
         else:
             app_filter = None
 
