@@ -1,6 +1,6 @@
 %define name gnome-info-collect
 %define version 1.0
-%define release 4
+%define release 5
 
 Summary: A simple utility to collect system information.
 Name: %{name}
@@ -24,7 +24,7 @@ BuildRequires: meson
 A GNOME system and user data collection tool. The collected data is anonymous and is sent to a secure server. The data will be used only for the purpose of enhancing usability and user experience of GNOME.
 
 %prep
-%setup -n %{name}-%{version} -q
+%setup -cq
 
 %build
 %meson
