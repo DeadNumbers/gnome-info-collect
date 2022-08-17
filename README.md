@@ -20,7 +20,11 @@ sudo dnf install gnome-info-collect
 
 ### Arch
 
-See https://archlinux.org/packages/extra/any/gnome-info-collect/
+Install the [gnome-info-collect](https://archlinux.org/packages/gnome-info-collect) package by running:
+
+```
+sudo pacman -S gnome-info-collect
+```
 
 ### openSUSE
 
