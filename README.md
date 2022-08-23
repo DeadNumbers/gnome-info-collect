@@ -30,6 +30,14 @@ sudo pacman -S gnome-info-collect
 
 See https://build.opensuse.org/package/show/GNOME:Next/gnome-info-collect
 
+### Ubuntu
+
+Install the [gnome-info-collect](https://snapcraft.io/gnome-info-collect) package by running:
+
+```
+sudo snap install --classic  gnome-info-collect
+```
+
 ## How to run
 
 Once gnome-info-collect is installed, just run `gnome-info-collect` from the Terminal.
