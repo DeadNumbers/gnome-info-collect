@@ -13,6 +13,11 @@ import re
 import json
 import hashlib
 
+if os.environ.get("XDG_CURRENT_DESKTOP") != "GNOME":
+    print("This tool must be run from a GNOME desktop.")
+    from sys import exit
+    exit(1)
+
 import gi
 
 gi.require_version('AccountsService', '1.0')
