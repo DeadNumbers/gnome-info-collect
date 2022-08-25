@@ -212,7 +212,7 @@ class GCollector():
         rdp_path = "/org/gnome/desktop/remote-desktop/rdp/"
         schema_source = Gio.SettingsSchemaSource.get_default()
         schema_setting = schema_source.lookup(rdp_schema, False)
-        if schema_setting.has_key("enable"):
+        if schema_setting is not None and schema_setting.has_key("enable"):
             rdp_on = Gio.Settings.new_with_path(rdp_schema, rdp_path).get_value("enable")
         else:
             rdp_on = False
