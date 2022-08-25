@@ -1,6 +1,6 @@
 %define name gnome-info-collect
 %define version 1.0
-%define release 5
+%define release 6
 
 Summary: A simple utility to collect system information.
 Name: %{name}
@@ -13,7 +13,7 @@ Prefix: %{_prefix}
 BuildArch: noarch
 Vendor: Vojtěch Staněk <vstanek@redhat.com>
 Url: https://gitlab.gnome.org/vstanek/gnome-info-collect
-Requires: python3 >= 3.6
+Requires: python3 >= 3.7
 Requires: python3-pip
 Requires: python3-requests
 Requires: python3-gobject

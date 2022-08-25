@@ -105,6 +105,6 @@ RPM packages of *gnome-info-collect* releases can be found in the
 Tarballs of *gnome-info-collect* releases can be found on the 
 [releases page](https://gitlab.gnome.org/vstanek/gnome-info-collect/-/releases "gnome-info-collect releases"), which you can use for running from source. 
 
-The tarball contains a client application written in Python. Therefore, you need Python 3 (3.6 or newer) installed on your system. In addition to libraries contained in a standard Python installation, it requires the `requests` package, which you can install by running `python -m pip install requests` in your terminal.
+The tarball contains a client application written in Python. Therefore, you need Python 3 (3.7 or newer) installed on your system. In addition to libraries contained in a standard Python installation, it requires the `requests` package, which you can install by running `python -m pip install requests` in your terminal.
 
 Then, simply run the app by running `python client.py` in your terminal.
