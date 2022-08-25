@@ -8,10 +8,10 @@ Help is wanted with packaging and the installation instructions - please create 
 
 Packages are available for the following distributions. If a package isn't available for your distro, see below for manual installation options.
 
-### Fedora, RHEL, CentOS
+### Fedora
 
 The [Fedora Copr repo](https://copr.fedorainfracloud.org/coprs/vstanek/gnome-info-collect/ 
-"Fedora Copr - vstanek/gnome-info-collect") is the recommended way to install gnome-info-collect on Fedora, RHEL and CentOS. To install, run:
+"Fedora Copr - vstanek/gnome-info-collect") is the recommended way to install gnome-info-collect on Fedora. To install, run:
 
 ```
 sudo dnf copr enable vstanek/gnome-info-collect
@@ -28,7 +28,13 @@ sudo pacman -S gnome-info-collect
 
 ### openSUSE
 
-See https://build.opensuse.org/package/show/GNOME:Next/gnome-info-collect
+Install the [gnome-info-collect](https://build.opensuse.org/package/show/GNOME:Next/gnome-info-collect) package by running:
+
+```
+zypper addrepo https://download.opensuse.org/repositories/GNOME:Next/openSUSE_Factory/GNOME:Next.repo
+zypper refresh
+zypper install gnome-info-collect
+```
 
 ### Ubuntu
 
