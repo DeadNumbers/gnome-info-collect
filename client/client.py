@@ -8,6 +8,7 @@
 
 import requests
 import os
+import pwd
 import subprocess
 import re
 import json
@@ -298,7 +299,7 @@ class GCollector():
         hash = ""
         with open("/etc/machine-id") as f:
             hash = hashlib.sha256(
-                ("gnome-info-collect" + f.read() + os.getlogin()).encode()
+                ("gnome-info-collect" + f.read() + pwd.getpwuid(os.getuid())[0]).encode()
             ).hexdigest()
         self.data["Unique ID"] = hash
 
