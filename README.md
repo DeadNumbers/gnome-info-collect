@@ -44,6 +44,8 @@ Install the [gnome-info-collect](https://snapcraft.io/gnome-info-collect) packag
 sudo snap install --classic  gnome-info-collect
 ```
 
+There is currently a known issue with using this snap on earlier versions of Ubuntu. If you are running Ubuntu 20 and earlier, follow the instructions for [manual installation](https://gitlab.gnome.org/vstanek/gnome-info-collect#manual-installation) at the bottom.
+
 ## How to run
 
 Once gnome-info-collect is installed, just run `gnome-info-collect` from the Terminal.
