@@ -6,6 +6,8 @@ Help is wanted with packaging and the installation instructions - please create 
 
 ## How to install
 
+⚠️ **gnome-info-collect is not currently collecting information. Installation is not recommended at this time.**
+
 Packages are available for the following distributions. If a package isn't available for your distro, see below for manual installation options.
 
 ### Fedora
